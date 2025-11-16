@@ -35,7 +35,6 @@ window.addEventListener('load', async () => {
       console.log('Service Worker registered:', registration);
 
       await requestNotificationPermission();
-      await initPushNotification(registration);
       setupPWAInstallPrompt();
 
     } catch (error) {
@@ -53,45 +52,6 @@ async function requestNotificationPermission() {
     } else {
       console.warn('Izin notifikasi ditolak.');
     }
-  }
-}
-
-const VAPID_PUBLIC_KEY = 'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
-
-function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
-  return outputArray;
-}
-
-async function initPushNotification(registration) {
-  if (!('Notification' in window)) {
-    console.warn('Browser tidak mendukung notifikasi.');
-    return;
-  }
-
-  const permission = await Notification.requestPermission();
-  if (permission !== 'granted') {
-    console.warn('Izin notifikasi ditolak.');
-    return;
-  }
-
-  try {
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-    });
-
-    console.log('Push Subscription:', JSON.stringify(subscription));
-
-    const token = getToken();
-    await API.sendSubscription(subscription, token);
-    console.log('Subscription berhasil dikirim ke server.');
-  } catch (err) {
-    console.error('Gagal melakukan subscription:', err);
   }
 }
 

@@ -3,7 +3,7 @@ import { registerRoute } from 'workbox-routing';
 import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 
-// Inject manifest (wajib)
+
 precacheAndRoute(self.__WB_MANIFEST);
 
 // Cache static asset
@@ -37,14 +37,21 @@ registerRoute(
 
 // Handle push notification
 self.addEventListener('push', (event) => {
-  const data = event.data?.json() || {
-    title: 'Notifikasi Baru',
-    body: 'Ada pembaruan baru!',
-  };
+  let data = {};
+
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (e) {
+   
+    data = {
+      title: 'Notifikasi',
+      body: event.data ? event.data.text() : 'Pesan baru diterima',
+    };
+  }
 
   event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
+    self.registration.showNotification(data.title || 'Notifikasi', {
+      body: data.body || 'Ada pembaruan baru!',
       icon: '/icons/icon-192x192.png',
     })
   );

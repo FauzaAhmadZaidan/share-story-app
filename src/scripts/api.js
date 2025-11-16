@@ -49,16 +49,4 @@ export const API = {
     return res.json();
   },
 
-  async subscribePush(token, subscription) {
-  const res = await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(subscription),
-  });
-  return res.json();
-},
-
 };
