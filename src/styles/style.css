@@ -225,3 +225,60 @@ footer a {
 }
 
 
+@media (max-width: 768px) {
+
+  header {
+    padding: 0.8rem 1rem;
+  }
+
+  header h1 {
+    font-size: 1.1rem;
+  }
+
+  nav {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  nav a,
+  nav button {
+    font-size: 0.85rem;
+  }
+
+  main {
+    padding: 90px 15px 20px; 
+  }
+
+  .story-grid {
+    padding: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .story-card img {
+    height: 180px;
+  }
+
+  form {
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .form-card {
+    margin-top: 70px;
+  }
+
+  footer {
+    font-size: 0.8rem;
+    padding: 10px 0;
+  }
+
+  .install-btn {
+    bottom: 20px !important;
+    right: 15px !important;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+}
