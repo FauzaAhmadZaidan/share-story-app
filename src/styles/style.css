@@ -57,6 +57,7 @@ nav a:hover, nav button:hover {
   text-decoration: underline;
 }
 
+
 main {
   flex: 1;
   padding: 20px;
@@ -140,6 +141,10 @@ main {
 }
 
 .install-btn {
+  background-color: #84994F;
+}
+
+.install-btn:hover {
   background-color: #31694E;
 }
 
