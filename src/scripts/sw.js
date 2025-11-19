@@ -1,12 +1,35 @@
 import { precacheAndRoute } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
+import { registerRoute, NavigationRoute } from 'workbox-routing';
 import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-// Cache static asset
+
+const htmlHandler = new NetworkFirst({
+  cacheName: 'html-cache',
+  plugins: [
+    new CacheableResponsePlugin({
+      statuses: [0, 200],
+    }),
+  ],
+});
+
+
+const navigationRoute = new NavigationRoute(htmlHandler);
+registerRoute(navigationRoute);
+
+
+registerRoute(
+  ({ request }) =>
+    request.destination === 'script' || request.destination === 'style',
+  new StaleWhileRevalidate({
+    cacheName: 'static-resources',
+  })
+);
+
+
 registerRoute(
   ({ request }) => request.destination === 'image',
   new CacheFirst({
@@ -14,15 +37,7 @@ registerRoute(
   })
 );
 
-// Cache CSS & JS
-registerRoute(
-  ({ request }) => request.destination === 'script' || request.destination === 'style',
-  new StaleWhileRevalidate({
-    cacheName: 'static-resources',
-  })
-);
 
-// Cache API story
 registerRoute(
   ({ url }) => url.origin === 'https://story-api.dicoding.dev',
   new NetworkFirst({
@@ -35,14 +50,13 @@ registerRoute(
   })
 );
 
-// Handle push notification
+
 self.addEventListener('push', (event) => {
   let data = {};
 
   try {
     data = event.data ? event.data.json() : {};
   } catch (e) {
-   
     data = {
       title: 'Notifikasi',
       body: event.data ? event.data.text() : 'Pesan baru diterima',
@@ -57,7 +71,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// Local postMessage notification
+
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'NEW_STORY') {
     self.registration.showNotification('Share Story App', {

@@ -1,5 +1,5 @@
 import { getToken } from '../scripts/utils.js';
-import { L } from '../scripts/main.js'; 
+import { L, onNewStoryAdded } from '../scripts/main.js'; 
 
 export function renderAddStoryPage() {
   const app = document.getElementById('app');
@@ -98,9 +98,7 @@ export function renderAddStoryPage() {
     console.log('Story added:', result);
     alert('Cerita berhasil ditambahkan!');
 
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({ type: 'NEW_STORY' });
-    }
+    onNewStoryAdded('Cerita baru berhasil ditambahkan!');
 
     location.hash = '#/home';
   } catch (error) {

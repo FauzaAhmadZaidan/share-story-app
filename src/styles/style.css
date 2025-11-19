@@ -109,6 +109,20 @@ main {
   color: #666;
 }
 
+.subscribe-btn {
+  background-color: #84994F;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.subscribe-btn:hover {
+  background-color: #31694E;
+}
+
 .bookmark-btn {
   background-color: #84994F;
   color: white;
